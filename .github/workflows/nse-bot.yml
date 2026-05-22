@@ -1,0 +1,33 @@
+name: NSE Bot Auto Run
+
+on:
+  schedule:
+    - cron: '20 4 * * 1-5'   # 9:50 AM IST (Mon-Fri)
+    - cron: '35 10 * * 1-5'  # 4:05 PM IST (Mon-Fri)
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install packages
+        run: pip install -r requirements.txt
+      
+      - name: Run bot
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python nse_quantitative_screener_bot.py
+      
+      - name: Save trade data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto: update bot data"
+          file_pattern: '*.json'
