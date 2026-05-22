@@ -110,6 +110,7 @@ class Color:
     YELLOW = "\033[93m"
     RED = "\033[91m"
     BOLD = "\033[1m"
+    WHITE = "\033[97m"
 
 def log_info(msg): 
     print(f"{Color.CYAN}[INFO]{Color.RESET} {msg}")
